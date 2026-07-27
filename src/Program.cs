@@ -1,6 +1,6 @@
 #:property Nullable=disable
 
-class Program
+class LibraryManager
 {
     static void Main()
     {
@@ -13,7 +13,7 @@ class Program
         while (true)
         {
             Console.WriteLine("Would you like to add or remove a book? (add/remove/exit)");
-            string action = Console.ReadLine();
+            string action = Console.ReadLine().ToLower();
 
             if (action == "add")
             {
@@ -50,39 +50,32 @@ class Program
             }
             else if (action == "remove")
             {
-                if (string.IsNullOrEmpty(book1) && string.IsNullOrEmpty(book2) && string.IsNullOrEmpty(book3) && string.IsNullOrEmpty(book4) && string.IsNullOrEmpty(book5))
+                Console.WriteLine("Enter the title of the book to remove:");
+                string removeBook = Console.ReadLine();
+
+                if (removeBook == book1)
                 {
-                    Console.WriteLine("The library is empty. No books to remove.");
+                    book1 = "";
+                }
+                else if (removeBook == book2)
+                {
+                    book2 = "";
+                }
+                else if (removeBook == book3)
+                {
+                    book3 = "";
+                }
+                else if (removeBook == book4)
+                {
+                    book4 = "";
+                }
+                else if (removeBook == book5)
+                {
+                    book5 = "";
                 }
                 else
                 {
-                    Console.WriteLine("Enter the title of the book to remove:");
-                    string removeBook = Console.ReadLine();
-
-                    if (removeBook == book1)
-                    {
-                        book1 = "";
-                    }
-                    else if (removeBook == book2)
-                    {
-                        book2 = "";
-                    }
-                    else if (removeBook == book3)
-                    {
-                        book3 = "";
-                    }
-                    else if (removeBook == book4)
-                    {
-                        book4 = "";
-                    }
-                    else if (removeBook == book5)
-                    {
-                        book5 = "";
-                    }
-                    else
-                    {
-                        Console.WriteLine("Book not found.");
-                    }
+                    Console.WriteLine("Book not found.");
                 }
             }
             else if (action == "exit")
@@ -94,6 +87,7 @@ class Program
                 Console.WriteLine("Invalid action. Please type 'add', 'remove', or 'exit'.");
             }
 
+            // Display the list of books
             Console.WriteLine("Available books:");
             if (!string.IsNullOrEmpty(book1)) Console.WriteLine(book1);
             if (!string.IsNullOrEmpty(book2)) Console.WriteLine(book2);
