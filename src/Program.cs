@@ -4,78 +4,62 @@ class LibraryManager
 {
     static void Main()
     {
-        string book1 = "";
-        string book2 = "";
-        string book3 = "";
-        string book4 = "";
-        string book5 = "";
+        string[] books = new string[5];
 
         while (true)
         {
             Console.WriteLine("Would you like to add or remove a book? (add/remove/exit)");
-            string action = Console.ReadLine().ToLower();
+            string action = Console.ReadLine().Trim().ToLower();
 
             if (action == "add")
             {
-                if (!string.IsNullOrEmpty(book1) && !string.IsNullOrEmpty(book2) && !string.IsNullOrEmpty(book3) && !string.IsNullOrEmpty(book4) && !string.IsNullOrEmpty(book5))
+                int emptyIndex = FindEmptySlot(books);
+                if (emptyIndex == -1)
                 {
                     Console.WriteLine("The library is full. No more books can be added.");
                 }
                 else
                 {
                     Console.WriteLine("Enter the title of the book to add:");
-                    string newBook = Console.ReadLine();
+                    string newBook = Console.ReadLine().Trim();
 
-                    if (string.IsNullOrEmpty(book1))
+                    if (string.IsNullOrEmpty(newBook))
                     {
-                        book1 = newBook;
+                        Console.WriteLine("Book title cannot be empty.");
                     }
-                    else if (string.IsNullOrEmpty(book2))
+                    else
                     {
-                        book2 = newBook;
-                    }
-                    else if (string.IsNullOrEmpty(book3))
-                    {
-                        book3 = newBook;
-                    }
-                    else if (string.IsNullOrEmpty(book4))
-                    {
-                        book4 = newBook;
-                    }
-                    else if (string.IsNullOrEmpty(book5))
-                    {
-                        book5 = newBook;
+                        books[emptyIndex] = newBook;
                     }
                 }
             }
             else if (action == "remove")
             {
-                Console.WriteLine("Enter the title of the book to remove:");
-                string removeBook = Console.ReadLine();
-
-                if (removeBook == book1)
+                if (IsLibraryEmpty(books))
                 {
-                    book1 = "";
-                }
-                else if (removeBook == book2)
-                {
-                    book2 = "";
-                }
-                else if (removeBook == book3)
-                {
-                    book3 = "";
-                }
-                else if (removeBook == book4)
-                {
-                    book4 = "";
-                }
-                else if (removeBook == book5)
-                {
-                    book5 = "";
+                    Console.WriteLine("The library is empty. No books to remove.");
                 }
                 else
                 {
-                    Console.WriteLine("Book not found.");
+                    Console.WriteLine("Enter the title of the book to remove:");
+                    string removeBook = Console.ReadLine().Trim();
+
+                    if (string.IsNullOrEmpty(removeBook))
+                    {
+                        Console.WriteLine("Book title cannot be empty.");
+                    }
+                    else
+                    {
+                        int foundIndex = FindBook(books, removeBook);
+                        if (foundIndex == -1)
+                        {
+                            Console.WriteLine("Book not found.");
+                        }
+                        else
+                        {
+                            books[foundIndex] = "";
+                        }
+                    }
                 }
             }
             else if (action == "exit")
@@ -87,13 +71,55 @@ class LibraryManager
                 Console.WriteLine("Invalid action. Please type 'add', 'remove', or 'exit'.");
             }
 
-            // Display the list of books
-            Console.WriteLine("Available books:");
-            if (!string.IsNullOrEmpty(book1)) Console.WriteLine(book1);
-            if (!string.IsNullOrEmpty(book2)) Console.WriteLine(book2);
-            if (!string.IsNullOrEmpty(book3)) Console.WriteLine(book3);
-            if (!string.IsNullOrEmpty(book4)) Console.WriteLine(book4);
-            if (!string.IsNullOrEmpty(book5)) Console.WriteLine(book5);
+            DisplayBooks(books);
+        }
+    }
+
+    static int FindEmptySlot(string[] books)
+    {
+        for (int i = 0; i < books.Length; i++)
+        {
+            if (string.IsNullOrEmpty(books[i]))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    static bool IsLibraryEmpty(string[] books)
+    {
+        for (int i = 0; i < books.Length; i++)
+        {
+            if (!string.IsNullOrEmpty(books[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static int FindBook(string[] books, string title)
+    {
+        for (int i = 0; i < books.Length; i++)
+        {
+            if (books[i] == title)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    static void DisplayBooks(string[] books)
+    {
+        Console.WriteLine("Available books:");
+        for (int i = 0; i < books.Length; i++)
+        {
+            if (!string.IsNullOrEmpty(books[i]))
+            {
+                Console.WriteLine(books[i]);
+            }
         }
     }
 }
