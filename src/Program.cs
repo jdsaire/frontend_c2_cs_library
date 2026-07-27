@@ -5,6 +5,8 @@ class LibraryManager
     static void Main()
     {
         string[] books = new string[5];
+        bool[] checkedOut = new bool[5];
+        int borrowedCount = 0;
 
         while (true)
         {
@@ -58,7 +60,64 @@ class LibraryManager
                         else
                         {
                             books[foundIndex] = "";
+                            if (checkedOut[foundIndex])
+                            {
+                                checkedOut[foundIndex] = false;
+                                borrowedCount--;
+                            }
                         }
+                    }
+                }
+            }
+            else if (action == "search")
+            {
+                Console.WriteLine("Enter the title of the book to search for:");
+                string searchTitle = Console.ReadLine().Trim();
+
+                if (string.IsNullOrEmpty(searchTitle))
+                {
+                    Console.WriteLine("Book title cannot be empty.");
+                }
+                else if (FindBookCaseInsensitive(books, searchTitle) == -1)
+                {
+                    Console.WriteLine("That book is not in the collection.");
+                }
+                else
+                {
+                    Console.WriteLine("That book is available in the collection.");
+                }
+            }
+            else if (action == "checkout")
+            {
+                Console.WriteLine("Enter the title of the book to check out or check in:");
+                string checkoutTitle = Console.ReadLine().Trim();
+
+                if (string.IsNullOrEmpty(checkoutTitle))
+                {
+                    Console.WriteLine("Book title cannot be empty.");
+                }
+                else
+                {
+                    int foundIndex = FindBookCaseInsensitive(books, checkoutTitle);
+                    if (foundIndex == -1)
+                    {
+                        Console.WriteLine("Book not found.");
+                    }
+                    else if (checkedOut[foundIndex])
+                    {
+                        checkedOut[foundIndex] = false;
+                        borrowedCount--;
+                        Console.WriteLine("Book checked in.");
+                    }
+                    else if (borrowedCount >= 3)
+                    {
+                        Console.WriteLine("Borrowing limit reached. You can only have 3 books checked out at a time.");
+                    }
+                    else
+                    {
+                        checkedOut[foundIndex] = true;
+                        borrowedCount++;
+                        Console.WriteLine("Book checked out.");
                     }
                 }
             }
@@ -68,7 +127,7 @@ class LibraryManager
             }
             else
             {
-                Console.WriteLine("Invalid action. Please type 'add', 'remove', or 'exit'.");
+                Console.WriteLine("Invalid action. Please type 'add', 'remove', 'search', 'checkout', or 'exit'.");
             }
 
             DisplayBooks(books);
@@ -104,6 +163,18 @@ class LibraryManager
         for (int i = 0; i < books.Length; i++)
         {
             if (books[i] == title)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    static int FindBookCaseInsensitive(string[] books, string title)
+    {
+        for (int i = 0; i < books.Length; i++)
+        {
+            if (string.Equals(books[i], title, StringComparison.OrdinalIgnoreCase))
             {
                 return i;
             }
